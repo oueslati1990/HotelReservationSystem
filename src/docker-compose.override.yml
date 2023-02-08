@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  hoteldb:
+    container_name: hoteldb
+    environment:
+      - POSTGRES_USER=Mohamed
+      - POSTGRES_PASSWORD=admin2023
+      - POSTGRES_DB=HotelDb
+    restart: always
+    ports:
+        - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    #networks:
+    #  - backend
+
+  pgadmin:
+    container_name: pgadmin_HRS
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=Mohamed@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=admin2023
+    restart: always
+    ports:
+        - "5050:80"
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+    #networks:
+    #  - backend
+
+  hotel.api:
+    container_name: hotel.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DbSettings__HotelDbConString=Host=hoteldb;Port=5432;Database=HotelDb;Username=Mohamed;Password=admin2023;"
+    depends_on:
+      - hoteldb
+    ports:
+      - "8003:80"
+    #networks:
+    #  - backend

@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  hoteldb:
+    image: postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+
+  hotel.api:
+    image: ${DOCKER_REGISTRY-}hotelapi
+    build:
+      context: .
+      dockerfile: Services/Hotel/Hotel.API/Dockerfile
+      
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+#networks:
+#  backend: 
+#    driver: bridge
