@@ -1,10 +1,6 @@
 ﻿using Hotel.API.Data;
-using Hotel.API.DTOs;
 using Hotel.API.Entities;
 using Hotel.API.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
