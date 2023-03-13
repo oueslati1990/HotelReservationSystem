@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 namespace Hotel.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class HotelController : ControllerBase
+    [Route("v1/[Controller]")]
+    public class HotelsController : ControllerBase
     {
         private readonly IRepository<HotelEntity> _repo;
         private readonly IMapper _mapper;
 
-        public HotelController(IRepository<HotelEntity> repo , IMapper mapper)
+        public HotelsController(IRepository<HotelEntity> repo , IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
         }
 
-        [HttpGet("{id}", Name = "GetHotelById")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK , Type = typeof(HotelResponseDto))]
         public async Task<ActionResult<HotelResponseDto>> GetHotelById(int id)
@@ -69,7 +69,10 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest , Type = typeof(string))]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-            var deleted = await _repo.DeleteAsync(id);
+            var hotel = await _repo.GetByIdAsync(id);
+            if (hotel == null) return NotFound("Hotel doesn't exist!");
+
+            var deleted = await _repo.DeleteAsync(hotel);
             if (!deleted) return BadRequest(" Hotel was not deleted !");
 
             return Ok();

@@ -36,12 +36,8 @@ namespace Hotel.API.Repositories
             return updated > 0;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Room room)
         {
-            var room = await GetByIdAsync(id);
-
-            if (room == null) return false;
-
             _context.Rooms.Remove(room);
             var removed = await _context.SaveChangesAsync();
             return removed > 0;

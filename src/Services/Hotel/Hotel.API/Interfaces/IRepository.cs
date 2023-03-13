@@ -11,6 +11,6 @@ namespace Hotel.API.Interfaces
         Task<T> GetByIdAsync(int id);
         Task<T> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(T entity);
     }
 }
