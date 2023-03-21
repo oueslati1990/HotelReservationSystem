@@ -33,6 +33,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DbSettings__HotelDbConString=Host=hoteldb;Port=5432;Database=HotelDb;Username=Mohamed;Password=admin2023;"
+    restart: always
     depends_on:
       - hoteldb
     ports:

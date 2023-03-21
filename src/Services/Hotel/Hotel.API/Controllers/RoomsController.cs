@@ -94,6 +94,9 @@ namespace Hotel.API.Controllers
         }
 
         [HttpDelete("v1/hotels/{hotelId}/rooms/{roomId}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteAsync(int hotelId , int roomId)
         {
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
