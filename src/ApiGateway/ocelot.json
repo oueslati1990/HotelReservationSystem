@@ -1,0 +1,59 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/v1/hotels",
+      "UpstreamHttpMethod": [ "Post", "Put" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "hotel.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/hotels"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/hotels/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "hotel.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/hotels/{id}"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/hotels/{hotelId}/rooms",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "hotel.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/hotels/{hotelId}/rooms"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/hotels/{hotelId}/rooms/{roomId}",
+      "UpstreamHttpMethod": [ "Get", "Put" , "Delete" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "hotel.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/hotels/{hotelId}/rooms/{roomId}"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  }
+}

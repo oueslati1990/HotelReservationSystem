@@ -24,7 +24,7 @@ namespace Hotel.API.Repositories
         {
             await _context.Hotels.AddAsync(entity);
             var created = await _context.SaveChangesAsync();
-            return created > 0 ? await GetByIdAsync(_context.Hotels.Count() - 1)
+            return created > 0 ? await GetByIdAsync(_context.Hotels.Count())
                                : null;
         }
 

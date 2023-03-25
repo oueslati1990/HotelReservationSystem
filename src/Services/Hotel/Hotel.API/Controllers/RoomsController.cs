@@ -76,18 +76,13 @@ namespace Hotel.API.Controllers
             var room = await _roomsRepo.GetByIdAsync(roomId);
             if (room == null) return NotFound("Room not found !");
 
-            var newRoom = new Room
-            {
-                RoomId = roomId,
-                RoomTypeId = roomRequestDto.RoomTypeId,
-                Floor = roomRequestDto.Floor,
-                Number = roomRequestDto.Number,
-                HotelId = hotelId,
-                Name = roomRequestDto.Name,
-                IsAvailable = roomRequestDto.IsAvailable
-            };
+            room.RoomTypeId = roomRequestDto.RoomTypeId;
+            room.Floor = roomRequestDto.Floor;
+            room.Number = roomRequestDto.Number;
+            room.Name = roomRequestDto.Name;
+            room.IsAvailable = roomRequestDto.IsAvailable;
 
-            var isUpdated = await _roomsRepo.UpdateAsync(newRoom);
+            var isUpdated = await _roomsRepo.UpdateAsync(room);
             if (!isUpdated) return BadRequest("Room wasn't updated ! ");
 
             return Ok();

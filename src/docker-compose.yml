@@ -13,10 +13,17 @@ services:
       context: .
       dockerfile: Services/Hotel/Hotel.API/Dockerfile
       
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+
 volumes:
   postgres_data:
   pgadmin_data:
 
-#networks:
-#  backend: 
-#    driver: bridge
+networks:
+  backend: 
+    driver: bridge
+

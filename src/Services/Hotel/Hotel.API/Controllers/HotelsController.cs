@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Hotel.API.Controllers
 {
     [ApiController]
-    [Route("v1/[Controller]")]
+    [Route("v1/hotels")]
     public class HotelsController : ControllerBase
     {
         private readonly IRepository<HotelEntity> _repo;
@@ -21,7 +21,7 @@ namespace Hotel.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("v1/hotels/{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK , Type = typeof(HotelResponseDto))]
         public async Task<ActionResult<HotelResponseDto>> GetHotelById(int id)
