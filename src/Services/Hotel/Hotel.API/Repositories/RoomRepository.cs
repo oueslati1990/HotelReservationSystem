@@ -31,19 +31,10 @@ namespace Hotel.API.Repositories
 
         public async Task<bool> UpdateAsync(Room entity)
         {
-            try
-            {
-                _context.Rooms.Update(entity);
-                var updated = await _context.SaveChangesAsync();
+            _context.Rooms.Update(entity);
+            var updated = await _context.SaveChangesAsync();
 
-                return updated > 0;
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                throw;
-            }
-
+            return updated > 0;
         }
 
         public async Task<bool> DeleteAsync(Room room)

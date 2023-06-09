@@ -4,6 +4,9 @@ services:
   hoteldb:
     image: postgres
 
+  authdb:
+    image: postgres
+
   pgadmin:
     image: dpage/pgadmin4
 
@@ -19,11 +22,19 @@ services:
       context: .
       dockerfile: ApiGateway/Dockerfile
 
+  accountapi:
+    image: ${DOCKER_REGISTRY-}accountapi
+    build:
+      context: .
+      dockerfile: Services/Authentication/AccountApi/Dockerfile
+
 volumes:
-  postgres_data:
+  postgres_hoteldb_data:
+  postgres_authdb_data:
   pgadmin_data:
 
 networks:
   backend: 
     driver: bridge
+
 

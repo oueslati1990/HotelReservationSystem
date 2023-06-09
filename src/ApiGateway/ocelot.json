@@ -1,6 +1,32 @@
 {
   "Routes": [
     {
+      "UpstreamPathTemplate": "/v1/account/register",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "accountapi",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/account/register"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/account/token",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "accountapi",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/account/token"
+    },
+    {
       "UpstreamPathTemplate": "/v1/hotels",
       "UpstreamHttpMethod": [ "Post", "Put" ],
 
@@ -25,6 +51,23 @@
         }
       ],
       "DownstreamPathTemplate": "/v1/hotels/{id}"
+      //,"AuthenticationOptions": {
+      //  "AuthenticationProviderKey": "accountSecuKey",
+      //  "AllowedScopes": [],
+      //  "PolicyName": "AdminPolicy"
+      //},
+      //"AuthorizationOptions": {
+      //  "Policies": {
+      //    "AdminPolicy": {
+      //      "RequireClaim": "roles",
+      //      "Values": [ "Admin" ]
+      //    },
+      //    "UserPolicy": {
+      //      "RequireClaim": "roles",
+      //      "Values": [ "User" ]
+      //    }
+      //  }
+      //}
     },
     {
       "UpstreamPathTemplate": "/v1/hotels/{hotelId}/rooms",
@@ -41,7 +84,7 @@
     },
     {
       "UpstreamPathTemplate": "/v1/hotels/{hotelId}/rooms/{roomId}",
-      "UpstreamHttpMethod": [ "Get", "Put" , "Delete" ],
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
 
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

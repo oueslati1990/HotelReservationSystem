@@ -2,6 +2,7 @@
 using Hotel.API.DTOs;
 using Hotel.API.Entities;
 using Hotel.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Hotel.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("v1/hotels/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK , Type = typeof(HotelResponseDto))]
         public async Task<ActionResult<HotelResponseDto>> GetHotelById(int id)
@@ -34,6 +35,7 @@ namespace Hotel.API.Controllers
             return Ok(hotelToReturn);
         }
 
+        //[Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK , Type =typeof(HotelResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest , Type = typeof(string))]
@@ -64,6 +66,7 @@ namespace Hotel.API.Controllers
             return Ok();
         }
 
+        //[Authorize(Policy = "UserPolicy")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest , Type = typeof(string))]

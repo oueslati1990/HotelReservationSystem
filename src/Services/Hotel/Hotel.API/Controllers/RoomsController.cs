@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace Hotel.API.Controllers
 {
     [ApiController]
+    [Route("v1/hotels/{hotelId}/rooms")]
     public class RoomsController : ControllerBase
     {
         private readonly IRepository<Room> _roomsRepo;
@@ -25,7 +26,7 @@ namespace Hotel.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("v1/hotels/{hotelId}/rooms/{roomId}")]
+        [HttpGet("{roomId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoomResponseDto))]
         public async Task<ActionResult<RoomResponseDto>> GetHotelById(int hotelId, int roomId)
@@ -40,7 +41,7 @@ namespace Hotel.API.Controllers
             return Ok(roomToReturn);
         }
 
-        [HttpPost("v1/hotels/{hotelId}/rooms")]
+        [HttpPost()]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoomResponseDto))]
         public async Task<ActionResult<RoomResponseDto>> CreateAsync([FromBody] RoomRequestDto roomRequest, int hotelId)
@@ -64,7 +65,7 @@ namespace Hotel.API.Controllers
             return Ok(roomToReturn);
         }
 
-        [HttpPut("v1/hotels/{hotelId}/rooms/{roomId}")]
+        [HttpPut("{roomId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -88,7 +89,7 @@ namespace Hotel.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("v1/hotels/{hotelId}/rooms/{roomId}")]
+        [HttpDelete("{roomId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK)]

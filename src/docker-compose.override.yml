@@ -11,7 +11,21 @@ services:
     ports:
         - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_hoteldb_data:/var/lib/postgresql/data/
+    networks:
+      - backend
+
+  authdb:
+    container_name: authdb
+    environment:
+      - POSTGRES_USER=Mohamed
+      - POSTGRES_PASSWORD=admin2023
+      - POSTGRES_DB=AuthDb
+    restart: always
+    ports:
+        - "5433:5432"
+    volumes:
+      - postgres_authdb_data:/var/lib/postgresql/data/
     networks:
       - backend
 
@@ -51,3 +65,16 @@ services:
     networks:
       - backend
 
+
+  accountapi:
+    container_name: accountapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "AuthDbSettings__AuthDbConString=Host=authdb;Port=5432;Database=AuthDb;Username=Mohamed;Password=admin2023;"
+    restart: always
+    depends_on: 
+      - authdb
+    #ports:
+    #  - "80"
+    networks:
+      - backend

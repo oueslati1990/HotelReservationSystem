@@ -1,23 +1,21 @@
-using AutoMapper;
-using Hotel.API.Data;
-using Hotel.API.Entities;
-using Hotel.API.Helpers;
-using Hotel.API.Interfaces;
-using Hotel.API.Repositories;
+using AccountApi.Data;
+using AccountApi.Helpers;
+using AccountApi.Interfaces;
+using AccountApi.Models;
+using AccountApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
 
-namespace Hotel.API
+namespace AccountApi
 {
     public class Startup
     {
@@ -31,17 +29,12 @@ namespace Hotel.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel.API", Version = "v1" });
-            });
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetValue<string>("DbSettings:HotelDbConString")));
-            services.AddScoped<IRepository<HotelEntity>, HotelRepository>();
-            services.AddScoped<IRepository<Room>, RoomRepository>();
-            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-
+            services.AddScoped<IAuthService, AuthService>();
+            services.Configure<JWT>(Configuration.GetSection("JWT"));
+            
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AuthContext>();
+            services.AddDbContext<AuthContext>(options =>
+                   options.UseNpgsql(Configuration.GetValue<string>("AuthDbSettings:AuthDbConString")));
 
             services.AddAuthentication(opt =>
             {
@@ -63,30 +56,11 @@ namespace Hotel.API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
                     };
                 });
-
-            services.AddAuthorization(options =>
+            
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
             {
-                //options.AddPolicy("AdminPolicy", policy =>
-                //    policy.RequireClaim("roles", "Admin"));
-                //options.AddPolicy("UserPolicy", policy =>
-                //    policy.RequireClaim("roles", "User"));
-                options.AddPolicy("AdminPolicy", policy =>
-                {
-                    policy.RequireAssertion(context =>
-                    {
-                        var roles = context.User.FindAll("roles").Select(r => r.Value);
-                        return roles.Any(r => r == "Admin");
-                    });
-                });
-
-                options.AddPolicy("UserPolicy", policy =>
-                {
-                    policy.RequireAssertion(context =>
-                    {
-                        var roles = context.User.FindAll("roles").Select(r => r.Value);
-                        return roles.Any(r => r == "User");
-                    });
-                });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AccountApi", Version = "v1" });
             });
         }
 
@@ -97,13 +71,12 @@ namespace Hotel.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccountApi v1"));
             }
 
             app.UseRouting();
 
             app.UseAuthentication();
-            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
