@@ -1,8 +1,6 @@
 version: '3.4'
 
 services:
-  hoteldb:
-    image: postgres
 
   authdb:
     image: postgres
@@ -28,13 +26,19 @@ services:
       context: .
       dockerfile: Services/Authentication/AccountApi/Dockerfile
 
+  reservation.api:
+    image: ${DOCKER_REGISTRY-}reservationapi
+    build:
+      context: .
+      dockerfile: Services/Reservation/Reservation.API/Dockerfile
+
 volumes:
-  postgres_hoteldb_data:
   postgres_authdb_data:
   pgadmin_data:
 
-networks:
-  backend: 
-    driver: bridge
+#networks:
+#  backend: 
+#    driver: bridge
+
 
 

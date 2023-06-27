@@ -14,11 +14,12 @@ namespace Hotel.API.Entities
         }
 
         [Key]
-        public int HotelId { get; set; }
+        public Guid HotelId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Location { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }
+
     }
 }

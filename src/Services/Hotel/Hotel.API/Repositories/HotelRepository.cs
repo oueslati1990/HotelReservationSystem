@@ -1,12 +1,15 @@
 ﻿using Hotel.API.Data;
 using Hotel.API.Entities;
 using Hotel.API.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Hotel.API.DTOs;
 
 namespace Hotel.API.Repositories
 {
-    public class HotelRepository : IRepository<HotelEntity>
+    public class HotelRepository : IHotelRepository
     {
         private readonly DataContext _context;
 
@@ -15,22 +18,25 @@ namespace Hotel.API.Repositories
             _context = context;
         }
 
-        public async Task<HotelEntity> GetByIdAsync(int id)
+        public async Task<HotelEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Hotels.FindAsync(id);
+            return await _context.Hotels.FirstOrDefaultAsync(h => h.HotelId == id);
         }
 
         public async Task<HotelEntity> CreateAsync(HotelEntity entity)
         {
             await _context.Hotels.AddAsync(entity);
             var created = await _context.SaveChangesAsync();
-            return created > 0 ? await GetByIdAsync(_context.Hotels.Count())
+            return created > 0 ? await GetByIdAsync(entity.HotelId)
                                : null;
         }
 
-        public async Task<bool> UpdateAsync(HotelEntity hotelToUpdate)
+        public async Task<bool> UpdateAsync(HotelEntity hotel,HotelRequestDto hotelDto)
         {
-            _context.Hotels.Update(hotelToUpdate);
+            hotel.Name = hotelDto.Name;
+            hotel.Address = hotelDto.Address;
+            hotel.Location = hotelDto.Location;
+            
             var updated = await _context.SaveChangesAsync();
             return updated > 0;
         }

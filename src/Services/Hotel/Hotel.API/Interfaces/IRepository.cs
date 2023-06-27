@@ -8,9 +8,8 @@ namespace Hotel.API.Interfaces
 {
     public interface IRepository<T>
     {
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(Guid id);
         Task<T> CreateAsync(T entity);
-        Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(T entity);
     }
 }

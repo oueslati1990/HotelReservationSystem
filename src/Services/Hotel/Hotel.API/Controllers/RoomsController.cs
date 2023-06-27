@@ -15,11 +15,11 @@ namespace Hotel.API.Controllers
     [Route("v1/hotels/{hotelId}/rooms")]
     public class RoomsController : ControllerBase
     {
-        private readonly IRepository<Room> _roomsRepo;
-        private readonly IRepository<HotelEntity> _hotelsRepo;
+        private readonly IRoomRepository _roomsRepo;
+        private readonly IHotelRepository _hotelsRepo;
         private readonly IMapper _mapper;
 
-        public RoomsController(IRepository<Room> roomsRepo, IRepository<HotelEntity> hotelsRepo, IMapper mapper)
+        public RoomsController(IRoomRepository roomsRepo, IHotelRepository hotelsRepo, IMapper mapper)
         {
             _roomsRepo = roomsRepo;
             _hotelsRepo = hotelsRepo;
@@ -29,7 +29,7 @@ namespace Hotel.API.Controllers
         [HttpGet("{roomId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoomResponseDto))]
-        public async Task<ActionResult<RoomResponseDto>> GetHotelById(int hotelId, int roomId)
+        public async Task<ActionResult<RoomResponseDto>> GetHotelById(Guid hotelId, Guid roomId)
         {
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
             if (hotel == null) return NotFound("Hotel not found ! ");
@@ -44,7 +44,7 @@ namespace Hotel.API.Controllers
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoomResponseDto))]
-        public async Task<ActionResult<RoomResponseDto>> CreateAsync([FromBody] RoomRequestDto roomRequest, int hotelId)
+        public async Task<ActionResult<RoomResponseDto>> CreateAsync([FromBody] RoomRequestDto roomRequest, Guid hotelId)
         {
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
             if (hotel == null) return NotFound("Hotel doesn't exist !");
@@ -69,21 +69,15 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateAsync([FromBody] RoomRequestDto roomRequestDto, int hotelId, int roomId)
+        public async Task<IActionResult> UpdateAsync([FromBody] RoomRequestDto roomRequestDto, Guid hotelId, Guid roomId)
         {
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
             if (hotel == null) return NotFound("Hotel doesn't exist !");
 
             var room = await _roomsRepo.GetByIdAsync(roomId);
             if (room == null) return NotFound("Room not found !");
-
-            room.RoomTypeId = roomRequestDto.RoomTypeId;
-            room.Floor = roomRequestDto.Floor;
-            room.Number = roomRequestDto.Number;
-            room.Name = roomRequestDto.Name;
-            room.IsAvailable = roomRequestDto.IsAvailable;
-
-            var isUpdated = await _roomsRepo.UpdateAsync(room);
+          
+            var isUpdated = await _roomsRepo.UpdateAsync(room, roomRequestDto);
             if (!isUpdated) return BadRequest("Room wasn't updated ! ");
 
             return Ok();
@@ -93,7 +87,7 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteAsync(int hotelId , int roomId)
+        public async Task<IActionResult> DeleteAsync(Guid hotelId , Guid roomId)
         {
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
             if (hotel == null) return NotFound("Hotel doesn't exist !");

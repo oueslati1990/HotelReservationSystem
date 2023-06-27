@@ -4,10 +4,11 @@ using Hotel.API.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Hotel.API.DTOs;
 
 namespace Hotel.API.Repositories
 {
-    public class RoomRepository : IRepository<Room>
+    public class RoomRepository : IRoomRepository
     {
         private readonly DataContext _context;
 
@@ -15,7 +16,7 @@ namespace Hotel.API.Repositories
         {
             _context = context;
         }
-        public async Task<Room> GetByIdAsync(int id)
+        public async Task<Room> GetByIdAsync(Guid id)
         {
             return await _context.Rooms.FindAsync(id);
         }
@@ -25,15 +26,19 @@ namespace Hotel.API.Repositories
             _context.Rooms.Add(entity);
             var created = await _context.SaveChangesAsync();
 
-            return created > 0 ? await GetByIdAsync(_context.Rooms.Count())
+            return created > 0 ? await GetByIdAsync(entity.RoomId)
                                : null;
         }
 
-        public async Task<bool> UpdateAsync(Room entity)
+        public async Task<bool> UpdateAsync(Room room , RoomRequestDto roomRequestDto)
         {
-            _context.Rooms.Update(entity);
-            var updated = await _context.SaveChangesAsync();
+            room.RoomTypeId = roomRequestDto.RoomTypeId;
+            room.Floor = roomRequestDto.Floor;
+            room.Number = roomRequestDto.Number;
+            room.Name = roomRequestDto.Name;
+            room.IsAvailable = roomRequestDto.IsAvailable;
 
+            var updated = await _context.SaveChangesAsync();
             return updated > 0;
         }
 
@@ -43,5 +48,6 @@ namespace Hotel.API.Repositories
             var removed = await _context.SaveChangesAsync();
             return removed > 0;
         }
+      
     }
 }

@@ -5,6 +5,7 @@ using Hotel.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Hotel.API.Controllers
@@ -13,10 +14,10 @@ namespace Hotel.API.Controllers
     [Route("v1/hotels")]
     public class HotelsController : ControllerBase
     {
-        private readonly IRepository<HotelEntity> _repo;
+        private readonly IHotelRepository _repo;
         private readonly IMapper _mapper;
 
-        public HotelsController(IRepository<HotelEntity> repo , IMapper mapper)
+        public HotelsController(IHotelRepository repo , IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
@@ -25,7 +26,7 @@ namespace Hotel.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK , Type = typeof(HotelResponseDto))]
-        public async Task<ActionResult<HotelResponseDto>> GetHotelById(int id)
+        public async Task<ActionResult<HotelResponseDto>> GetHotelById(Guid id)
         {
             var hotel = await _repo.GetByIdAsync(id);
 
@@ -43,6 +44,7 @@ namespace Hotel.API.Controllers
         {
             var newHotel = new HotelEntity
             {
+                HotelId = Guid.NewGuid(),
                 Name = hotelRequest.Name,
                 Address = hotelRequest.Address,
                 Location = hotelRequest.Location
@@ -55,12 +57,17 @@ namespace Hotel.API.Controllers
             return Ok(hotelToReturn);
         }
 
-        [HttpPut]
+        [HttpPut("hotelId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest , Type = typeof(string))]
-        public async Task<IActionResult> UpdateHotel([FromBody] HotelEntity hotel)
+        [ProducesResponseType(StatusCodes.Status404NotFound , Type = typeof(string))]
+        public async Task<IActionResult> UpdateHotel(Guid hotelId, [FromBody] HotelRequestDto hotelRequestDto)
         {
-            var updated = await _repo.UpdateAsync(hotel);
+
+            var hotel = await _repo.GetByIdAsync(hotelId);
+            if(hotel == null) return NotFound("Hotel was not found!");
+            
+            var updated = await _repo.UpdateAsync(hotel, hotelRequestDto);
             if (!updated) return BadRequest("Hotel was not updated ! ");
 
             return Ok();
@@ -70,7 +77,7 @@ namespace Hotel.API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest , Type = typeof(string))]
-        public async Task<IActionResult> DeleteHotel(int id)
+        public async Task<IActionResult> DeleteHotel(Guid id)
         {
             var hotel = await _repo.GetByIdAsync(id);
             if (hotel == null) return NotFound("Hotel doesn't exist!");

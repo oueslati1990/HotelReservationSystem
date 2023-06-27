@@ -1,0 +1,3 @@
+{
+    "dotnet.defaultSolution": "Reservation.API\\Reservation.API.sln"
+}

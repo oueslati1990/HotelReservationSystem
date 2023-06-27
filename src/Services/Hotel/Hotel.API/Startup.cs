@@ -38,8 +38,8 @@ namespace Hotel.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel.API", Version = "v1" });
             });
             services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetValue<string>("DbSettings:HotelDbConString")));
-            services.AddScoped<IRepository<HotelEntity>, HotelRepository>();
-            services.AddScoped<IRepository<Room>, RoomRepository>();
+            services.AddScoped<IHotelRepository, HotelRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 

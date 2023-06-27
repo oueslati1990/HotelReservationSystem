@@ -1,19 +1,19 @@
 version: '3.4'
 
 services:
-  hoteldb:
-    container_name: hoteldb
-    environment:
-      - POSTGRES_USER=Mohamed
-      - POSTGRES_PASSWORD=admin2023
-      - POSTGRES_DB=HotelDb
-    restart: always
-    ports:
-        - "5432:5432"
-    volumes:
-      - postgres_hoteldb_data:/var/lib/postgresql/data/
-    networks:
-      - backend
+  #hoteldb:
+    #container_name: hoteldb
+    #environment:
+    #  - POSTGRES_USER=Mohamed
+    #  - POSTGRES_PASSWORD=admin2023
+    #  - POSTGRES_DB=HotelDb
+    #restart: always
+    #ports:
+    #    - "5432:5432"
+    #volumes:
+    #  - postgres_hoteldb_data:/var/lib/postgresql/data/
+    #networks:
+    #  - backend
 
   authdb:
     container_name: authdb
@@ -26,8 +26,8 @@ services:
         - "5433:5432"
     volumes:
       - postgres_authdb_data:/var/lib/postgresql/data/
-    networks:
-      - backend
+    #networks:
+    #  - backend
 
   pgadmin:
     container_name: pgadmin_HRS
@@ -39,21 +39,21 @@ services:
         - "5050:80"
     volumes:
       - pgadmin_data:/root/.pgadmin
-    networks:
-      - backend
+    #networks:
+    #  - backend
 
   hotel.api:
     container_name: hotel.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DbSettings__HotelDbConString=Host=hoteldb;Port=5432;Database=HotelDb;Username=Mohamed;Password=admin2023;"
+    #  - "DbSettings__HotelDbConString=Host=hoteldb;Port=5432;Database=HotelDb;Username=Mohamed;Password=admin2023;"
     restart: always
-    depends_on:
-      - hoteldb
+    #depends_on:
+    #  - hoteldb
     #ports:
     #  - "8000:80"
-    networks:
-      - backend
+    #networks:
+    #  - backend
 
   apigateway:
     container_name: api-gateway
@@ -62,8 +62,8 @@ services:
     restart: always
     ports:
       - "5000:80"
-    networks:
-      - backend
+    #networks:
+    #  - backend
 
 
   accountapi:
@@ -76,5 +76,15 @@ services:
       - authdb
     #ports:
     #  - "80"
-    networks:
-      - backend
+    #networks:
+    #  - backend
+
+  reservation.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

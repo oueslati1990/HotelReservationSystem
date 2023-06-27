@@ -51,23 +51,6 @@
         }
       ],
       "DownstreamPathTemplate": "/v1/hotels/{id}"
-      //,"AuthenticationOptions": {
-      //  "AuthenticationProviderKey": "accountSecuKey",
-      //  "AllowedScopes": [],
-      //  "PolicyName": "AdminPolicy"
-      //},
-      //"AuthorizationOptions": {
-      //  "Policies": {
-      //    "AdminPolicy": {
-      //      "RequireClaim": "roles",
-      //      "Values": [ "Admin" ]
-      //    },
-      //    "UserPolicy": {
-      //      "RequireClaim": "roles",
-      //      "Values": [ "User" ]
-      //    }
-      //  }
-      //}
     },
     {
       "UpstreamPathTemplate": "/v1/hotels/{hotelId}/rooms",
