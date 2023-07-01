@@ -7,16 +7,7 @@ namespace Hotel.API.Data.Migrations
     public partial class CreateTablesWithNewIdType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Rooms");
-
-            migrationBuilder.DropTable(
-                name: "Hotels");
-
-            migrationBuilder.DropTable(
-                name: "RoomTypes");
-                
+        {                
             migrationBuilder.CreateTable(
                 name: "Hotels",
                 columns: table => new

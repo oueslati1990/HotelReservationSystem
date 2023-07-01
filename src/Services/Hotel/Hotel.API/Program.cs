@@ -18,13 +18,13 @@ namespace Hotel.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
-                /*.ConfigureServices(services =>
+                })
+                .ConfigureServices(services =>
                 {
                     var context = services.BuildServiceProvider()
                                           .GetRequiredService<DataContext>();
 
                     context.Database.Migrate();
-                });*/
+                });
     }
 }

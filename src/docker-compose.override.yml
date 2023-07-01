@@ -1,17 +1,17 @@
 version: '3.4'
 
 services:
-  #hoteldb:
-    #container_name: hoteldb
-    #environment:
-    #  - POSTGRES_USER=Mohamed
-    #  - POSTGRES_PASSWORD=admin2023
-    #  - POSTGRES_DB=HotelDb
-    #restart: always
-    #ports:
-    #    - "5432:5432"
-    #volumes:
-    #  - postgres_hoteldb_data:/var/lib/postgresql/data/
+  hoteldb:
+    container_name: hoteldb
+    environment:
+      - POSTGRES_USER=Mohamed
+      - POSTGRES_PASSWORD=admin2023
+      - POSTGRES_DB=HotelDb
+    restart: always
+    ports:
+        - "5432:5432"
+    volumes:
+      - postgres_hoteldb_data:/var/lib/postgresql/data/
     #networks:
     #  - backend
 
@@ -46,10 +46,10 @@ services:
     container_name: hotel.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    #  - "DbSettings__HotelDbConString=Host=hoteldb;Port=5432;Database=HotelDb;Username=Mohamed;Password=admin2023;"
+      - "DbSettings__HotelDbConString=Host=hoteldb;Port=5432;Database=HotelDb;Username=Mohamed;Password=admin2023;"
     restart: always
-    #depends_on:
-    #  - hoteldb
+    depends_on:
+      - hoteldb
     #ports:
     #  - "8000:80"
     #networks:
