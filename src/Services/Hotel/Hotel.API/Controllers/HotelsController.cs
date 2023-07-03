@@ -42,6 +42,14 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest , Type = typeof(string))]
         public async Task<ActionResult<HotelResponseDto>> CreateHotel([FromBody] HotelRequestDto hotelRequest)
         {
+            if(!ModelState.IsValid) 
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage)
+                                          .ToList();
+                return BadRequest(errors);
+            }
+            
             var newHotel = new HotelEntity
             {
                 HotelId = Guid.NewGuid(),
@@ -63,7 +71,14 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound , Type = typeof(string))]
         public async Task<IActionResult> UpdateHotel(Guid hotelId, [FromBody] HotelRequestDto hotelRequestDto)
         {
-
+            if(!ModelState.IsValid) 
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage)
+                                          .ToList();
+                return BadRequest(errors);
+            }
+            
             var hotel = await _repo.GetByIdAsync(hotelId);
             if(hotel == null) return NotFound("Hotel was not found!");
             

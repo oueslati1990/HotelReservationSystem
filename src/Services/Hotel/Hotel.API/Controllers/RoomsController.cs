@@ -32,9 +32,6 @@ namespace Hotel.API.Controllers
         public async Task<ActionResult<RoomResponseDto>> GetRoomById(Guid hotelId, Guid roomId)
         {
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
-            Console.WriteLine($"hotel id  = {hotelId}");
-            Console.WriteLine($"hotel name = {hotel.Name}");
-            
             if (hotel == null) return NotFound("Hotel not found ! ");
 
             var room = await _roomsRepo.GetByIdAsync(roomId);
@@ -49,6 +46,14 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoomResponseDto))]
         public async Task<ActionResult<RoomResponseDto>> CreateRoomAsync([FromBody] RoomRequestDto roomRequest, Guid hotelId)
         {
+            if(!ModelState.IsValid) 
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage)
+                                          .ToList();
+                return BadRequest(errors);
+            }
+
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
             if (hotel == null) return NotFound("Hotel doesn't exist !");
 
@@ -74,6 +79,14 @@ namespace Hotel.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateRoomAsync([FromBody] RoomRequestDto roomRequestDto, Guid hotelId, Guid roomId)
         {
+            if(!ModelState.IsValid) 
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage)
+                                          .ToList();
+                return BadRequest(errors);
+            }
+            
             var hotel = await _hotelsRepo.GetByIdAsync(hotelId);
             if (hotel == null) return NotFound("Hotel doesn't exist !");
 
