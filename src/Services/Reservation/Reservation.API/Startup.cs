@@ -1,18 +1,15 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Reservation.API.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Reservation.API.Helpers;
+using Reservation.API.Interfaces;
+using Reservation.API.Repositories;
 
 namespace Reservation.API
 {
@@ -36,6 +33,9 @@ namespace Reservation.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reservation.API", Version = "v1" });
             });
+
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

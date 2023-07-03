@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Reservation.API.DTOs
 {
-    public class ReservationWriteDto
+    public class ReservationRequestDto
     {
         [Required]
-        public int HotelId { get; set; }
+        public Guid HotelId { get; set; }
         [Required]
         public int RoomTypeId { get; set; }
         [Required]

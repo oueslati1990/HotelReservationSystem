@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Reservation.API.DTOs
 {
-    public class ReservationReadDto
+    public class ReservationResponseDto
     {
         public Guid ReservationId { get; set; }
-        public int HotelId { get; set; }
+        public Guid HotelId { get; set; }
         public int RoomTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

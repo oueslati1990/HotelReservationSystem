@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Reservation.API.Interfaces
 {
-    public interface IReservationService
+    public interface IReservationRepository
     {
-        Task<ReservationReadDto> CreateReservation(ReservationWriteDto reservationWriteDto);
+        Task<ReservationResponseDto> CreateReservation(ReservationRequestDto reservationRequestDto);
     }
 }
