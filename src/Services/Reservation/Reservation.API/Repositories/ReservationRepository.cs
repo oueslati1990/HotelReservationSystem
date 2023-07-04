@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Reservation.API.Data;
 using Reservation.API.DTOs;
 using Reservation.API.Entities;
@@ -40,6 +41,19 @@ namespace Reservation.API.Repositories
             if (created <= 0) return null;
 
             return _mapper.Map<ReservationResponseDto>(reservation);
+        }
+
+        public async Task<ReservationEntity> GetReservationById(Guid id)
+        {
+            return await _context.Reservations.FirstOrDefaultAsync(r => r.ReservationId == id);
+        }
+
+        public async Task<ReservationEntity> UpdateReservation(ReservationEntity reservation, Status status)
+        {
+            reservation.Status = EnumHelper.GetDescription(status);
+            var updated = await _context.SaveChangesAsync() > 0;
+
+            return updated ? reservation : null;
         }
     }
 }

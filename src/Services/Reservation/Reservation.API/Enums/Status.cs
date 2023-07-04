@@ -11,9 +11,9 @@ namespace Reservation.API.Enums
         PAID,
 
         [Description("Canceled")]
-        CANCELED,
+        CANCELED
 
-        [Description("Refunded")]
-        REFUNDED
+        //[Description("Refunded")]
+        //REFUNDED
     }
 }

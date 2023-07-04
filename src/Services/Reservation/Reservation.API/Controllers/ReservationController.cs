@@ -62,25 +62,40 @@ namespace Reservation.API.Controllers
         }
 
         [HttpPost("complete/{reservationId}")]
-        public ActionResult<bool> CompleteReservation(Guid reservationId)
+        public async Task<ActionResult<ReservationEntity>> CompleteReservation(Guid reservationId)
         {
             //1. Get reservation
+            var reservation = await _reservationRepository.GetReservationById(reservationId);
 
-            //2. pay for the reservation
+            //2. pay for the reservation 
+            // TODO
+            bool reservationPaid = true ;
+            if (!reservationPaid) return BadRequest("Rservation incomplete , failed to pay !");
 
             //3. Modify reservation status
-            return null;
+            var response = await _reservationRepository.UpdateReservation(reservation , Status.PAID);
+            if (response == null) return BadRequest("Reservation incomplete , status was not changed !");
+            
+            return Ok(response);
         }
 
         [HttpPost("cancel/{reservationId}")]
-        public ActionResult<bool> CancelReservation(Guid reservationId)
+        public async Task<ActionResult<bool>> CancelReservation(Guid reservationId)
         {
             //1. Get reservation
+            var reservation = await _reservationRepository.GetReservationById(reservationId);
 
-            //2. pay refund 
+            //2. Get refund 
+            // TODO
+            bool refundPaid = true;
+            if (!refundPaid) return BadRequest("Cancelation failed , could not give refund !");
 
             //3. Modify reservation status
-            return null;
+            var response = await _reservationRepository.UpdateReservation(reservation, Status.CANCELED);
+
+            if (response == null) return BadRequest("Cancelation incomplete , status was not changed !");
+
+            return Ok(response);
         }
        
     }
