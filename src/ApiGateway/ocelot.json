@@ -77,6 +77,45 @@
         }
       ],
       "DownstreamPathTemplate": "/v1/hotels/{hotelId}/rooms/{roomId}"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/reservations/reserve",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reservation.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/reservations/reserve"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/reservations/complete/{reservationId}",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reservation.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/reservations/complete/{reservationId}"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/reservations/cancel/{reservationId}",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reservation.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/reservations/cancel/{reservationId}"
     }
   ],
   "GlobalConfiguration": {
