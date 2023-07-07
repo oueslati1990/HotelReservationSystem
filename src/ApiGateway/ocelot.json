@@ -116,6 +116,32 @@
         }
       ],
       "DownstreamPathTemplate": "/v1/reservations/cancel/{reservationId}"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/payments",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "payment.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/payments"
+    },
+    {
+      "UpstreamPathTemplate": "/v1/payments/{reservationId}/refund",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "payment.api",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/v1/payments/{reservationId}/refund"
     }
   ],
   "GlobalConfiguration": {

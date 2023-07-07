@@ -29,6 +29,34 @@ services:
     #networks:
     #  - backend
 
+  paymentdb:
+    container_name: paymentdb
+    environment:
+      - POSTGRES_USER=Mohamed
+      - POSTGRES_PASSWORD=admin2023
+      - POSTGRES_DB=AuthDb
+    restart: always
+    ports:
+        - "5434:5432"
+    volumes:
+      - postgres_paymentdb_data:/var/lib/postgresql/data/
+    #networks:
+    #  - backend
+
+  reservationdb:
+    container_name: reservationdb
+    environment:
+      - POSTGRES_USER=Mohamed
+      - POSTGRES_PASSWORD=admin2023
+      - POSTGRES_DB=AuthDb
+    restart: always
+    ports:
+        - "5435:5432"
+    volumes:
+      - postgres_reservationdb_data:/var/lib/postgresql/data/
+    #networks:
+    #  - backend
+
   pgadmin:
     container_name: pgadmin_HRS
     environment:
@@ -82,9 +110,16 @@ services:
   reservation.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "DbSettings__ReservationDbConString=Host=reservationdb;Port=5432;Database=ReservationDb;Username=Mohamed;Password=admin2023;"
+    restart: always
+    depends_on:
+      - reservationdb
+
+  payment.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DbSettings__PaymentDbConString=Host=paymentdb;Port=5432;Database=PaymentDb;Username=Mohamed;Password=admin2023;"
+    restart: always
+    depends_on:
+      - paymentdb
+

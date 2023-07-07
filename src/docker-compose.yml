@@ -1,6 +1,12 @@
 version: '3.4'
 
 services:
+  paymentdb:
+    image: postgres
+
+  reservationdb:
+    image: postgres
+
   hoteldb:
     image: postgres
 
@@ -34,14 +40,23 @@ services:
       context: .
       dockerfile: Services/Reservation/Reservation.API/Dockerfile
 
+  payment.api:
+    image: ${DOCKER_REGISTRY-}paymentapi
+    build:
+      context: .
+      dockerfile: Services/Payment/Payment.API/Dockerfile
+
 volumes:
   postgres_hoteldb_data:
   postgres_authdb_data:
+  postgres_paymentdb_data:
+  postgres_reservationdb_data:
   pgadmin_data:
 
 #networks:
 #  backend: 
 #    driver: bridge
+
 
 
 

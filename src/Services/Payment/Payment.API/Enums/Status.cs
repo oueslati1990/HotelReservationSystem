@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Reservation.API.Enums
+namespace Payment.API.Enums
 {
     public enum Status
     {
